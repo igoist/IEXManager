@@ -1,0 +1,96 @@
+$PM: $P + '-modal';
+
+.#{$PM}-mask,
+.#{$PM}-wrap {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.#{$PM}-mask {
+  top: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.#{$PM}-wrap {
+  top: 100px;
+  overflow: auto;
+  outline: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.#{$PM} {
+  position: relative;
+  top: 100px;
+  margin: 0 auto;
+  padding: 0 0 24px;
+  width: auto;
+  max-width: calc(100vw - 32px);
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.#{$PM}-content {
+  position: relative;
+  border: 0;
+  border-radius: 2px;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+  pointer-events: auto;
+}
+
+.#{$PM}-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 2px 2px 0 0;
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.#{$PM}-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 54px;
+  height: 54px;
+  background-image: url(/img/common/btn-close.svg);
+  background-position: center center;
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.#{$PM}-title {
+  margin: 0;
+  line-height: 22px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 16px;
+  word-wrap: break-word;
+}
+
+.#{$PM}-body {
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.5715;
+  word-wrap: break-word;
+}
+
+.#{$PM}-footer {
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0 0 2px 2px;
+  padding: 10px 16px;
+  background: 0 0;
+  text-align: right;
+}
+
+.#{$PM}-footer .hb-btn.cancel {
+  margin-right: 12px;
+}

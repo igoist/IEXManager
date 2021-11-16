@@ -1,0 +1,43 @@
+$PI: $P + '-input';
+$PT: $P + '-textarea';
+
+.#{$PT},
+.#{$PI} {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  padding: 4px 11px;
+  width: 100%;
+  min-width: 0;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 22px;
+  background-color: #fff;
+  background-image: none;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  list-style: none;
+  -webkit-font-feature-settings: 'tnum';
+  font-feature-settings: 'tnum';
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+.#{$PI} {
+  height: 32px;
+}
+
+.#{$PT}-focused,
+.#{$PT}:focus,
+.#{$PI}-focused,
+.#{$PI}:focus {
+  outline: 0;
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.#{$PI}.is-disabled {
+  cursor: not-allowed;
+  user-select: none;
+}

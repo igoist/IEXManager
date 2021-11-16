@@ -1,0 +1,33 @@
+{
+  "name": "IEXManager",
+  "description": "igoist ..., aim at baidu, ...",
+  "version": "1.0.0",
+  "background": {
+    "scripts": ["js/background.bundle.min.js"],
+    "persistent": false
+  },
+  "icons": {
+    "32": "img/gear_large.svg",
+    "48": "img/icon.png",
+    "128": "img/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "run_at": "document_end",
+      "js": ["dll/react.dll.js", "js/demo.bundle.min.js"],
+      "css": ["css/IDemo.css"],
+      "exclude_matches": ["http://127.0.0.1:333/*", "http://localhost:3333/*", "https://*.yupoo-dev.cn/*", "http://*.impress.com/*"]
+    }
+  ],
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
+  "browser_action": {
+    "default_icon": "img/gear_large.svg",
+    "default_title": "自定义广告屏蔽扩展",
+    "default_popup": "popup.html"
+  },
+  "default_locale": "zh_CN",
+  "permissions": ["activeTab", "tabs", "storage", "sessions", "declarativeContent", "webNavigation", "*://*/*", "management"],
+  "web_accessible_resources": ["css/pinit.min.css", "css/IAdB.css", "dll/reactForPinit.dll.js", "img/icon.png"]
+}

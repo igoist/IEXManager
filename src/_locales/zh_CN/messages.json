@@ -1,0 +1,17 @@
+{
+  "popup_title_snapshot": {
+    "message": "快照列表"
+  },
+  "popup_title_extension": {
+    "message": "插件列表"
+  },
+  "background_snapshot_all": {
+    "message": "启用全部"
+  },
+  "background_snapshot_none": {
+    "message": "禁用全部"
+  },
+  "background_snapshot_last": {
+    "message": "撤销"
+  }
+}

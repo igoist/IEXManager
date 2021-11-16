@@ -1,0 +1,26 @@
+.#{$IAdB} {
+  &.clearfix {
+    &:before,
+    &:after {
+      content: '';
+      display: table;
+    }
+
+    &:after {
+      clear: both;
+    }
+  }
+
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+
+  &.clickable {
+    pointer-events: auto;
+  }
+
+  &.is-hidden {
+    display: none;
+  }
+}

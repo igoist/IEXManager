@@ -1,0 +1,17 @@
+{
+  "popup_title_snapshot": {
+    "message": "Snapshot"
+  },
+  "popup_title_extension": {
+    "message": "Extension"
+  },
+  "background_snapshot_all": {
+    "message": "Enable all"
+  },
+  "background_snapshot_none": {
+    "message": "Disable all"
+  },
+  "background_snapshot_last": {
+    "message": "Undo"
+  }
+}

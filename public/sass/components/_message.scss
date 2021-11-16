@@ -1,0 +1,109 @@
+$PM: $P + '-message';
+
+.#{$PM}-wrap {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  width: 100%;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.65);
+  font-family: Monospaced Number, Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Hiragino Sans GB, Microsoft YaHei,
+    Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  list-style: none;
+  pointer-events: none;
+  z-index: 1010;
+  user-select: none;
+}
+
+.#{$PM} {
+  padding: 8px;
+  text-align: center;
+
+  &:first-child {
+    margin-top: -8px;
+  }
+
+  &.#{$P}-fade-enter {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+  }
+
+  &.#{$P}-fade-leave {
+    animation-duration: 0.2s;
+    animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.34);
+  }
+
+  &.#{$P}-fade-enter.#{$P}-fade-enter-active {
+    animation-name: ETMessageFadeIn;
+  }
+
+  &.#{$P}-fade-leave.#{$P}-fade-leave-active {
+    animation-name: ETMessageFadeOut;
+    // overflow: hidden;
+  }
+}
+
+.#{$PM}-content {
+  display: inline-block;
+  position: relative;
+  border-radius: 4px;
+  padding: 0 16px 0 40px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  pointer-events: all;
+
+  &.#{$PM}-success:before {
+    content: '\E630';
+    color: #52c41a;
+  }
+
+  &.#{$PM}-warning:before,
+  &.#{$PM}-warn:before {
+    content: '\E62C';
+    color: #faad14;
+  }
+
+  &.#{$PM}-error:before {
+    content: '\E62E';
+    color: #f5222d;
+  }
+
+  &::before {
+    position: absolute;
+    left: 12px;
+    font-family: anticon !important;
+    font-size: 16px;
+    font-style: normal;
+    text-align: center;
+    text-transform: none;
+    text-rendering: optimizeLegibility;
+    vertical-align: baseline;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@keyframes ETMessageFadeIn {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ETMessageFadeOut {
+  to {
+    transform: translateY(-10px);
+    // 个人感觉只有在连续触发多个 message 情况下, 使用 -100% 看起来合适一些？
+    // transform: translateY(-100%);
+    opacity: 0;
+  }
+}

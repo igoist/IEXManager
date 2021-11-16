@@ -1,0 +1,78 @@
+.#{$P}-root {
+  position: fixed;
+  inset: 0;
+  background-color: #333;
+  cursor: pointer;
+  transition: all 0.36s ease-in-out;
+  z-index: 9999999;
+}
+
+.#{$P}-wrap {
+  margin: 0 auto;
+  max-width: 648px;
+  height: 100vh;
+  background-color: #666;
+  overflow: auto;
+}
+
+.#{$P}-title {
+  padding-left: 8px;
+  background-color: #eee;
+  color: #000;
+  font-size: 18px;
+  height: 38px;
+  line-height: 38px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.#{$P}-snapshot-item {
+  position: relative;
+  padding-left: 12px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.#{$P}-snapshot-item-name {
+  max-width: 20%;
+  @include textOverflow;
+}
+
+.#{$P}-exs {
+}
+
+.#{$P}-ex-item {
+  position: relative;
+  padding-left: 32px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 12px;
+
+  &.#{$P}-ex-item-disabled {
+    .#{$P}-ex-item-icon {
+      opacity: 0.4;
+    }
+
+    .#{$P}-ex-item-name {
+      color: #ccc;
+    }
+  }
+}
+
+.#{$P}-ex-item-icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+}
+
+.#{$P}-ex-item-name {
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+  color: #000;
+}

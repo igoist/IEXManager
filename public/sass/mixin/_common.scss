@@ -1,0 +1,56 @@
+// size position 4 个参数必须传, url 和 repeat 看具体情况
+@mixin bg($w, $h, $pX, $pY, $url: '', $repeat: no-repeat) {
+  @if $url != '' {
+    background-image: url($IMGROOT + $url);
+  }
+  background-position: $pX $pY;
+  background-repeat: $repeat;
+  @if $w != '' {
+    background-size: $w $h;
+  } @else {
+    background-size: cover;
+  }
+}
+
+@mixin textOverflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin ETAnimationMixin($pf) {
+  .#{$pf}-enter,
+  .#{$pf}-leave {
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    animation-play-state: paused;
+  }
+
+  .#{$pf}-enter.#{$pf}-enter-active {
+    animation-play-state: running;
+  }
+
+  .#{$pf}-leave.#{$pf}-leave-active {
+    animation-play-state: running;
+    pointer-events: none;
+  }
+
+  .#{$pf}-enter,
+  .#{$pf}-leave {
+    animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  // 通用情况下不应该存在这个
+  // .#{$pf}-enter {
+  //   opacity: 0;
+  // }
+}
+
+// 文字最多展示 n 行
+@mixin lineMax($n) {
+  display: -webkit-box;
+  -webkit-line-clamp: $n;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

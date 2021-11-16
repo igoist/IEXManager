@@ -1,0 +1,44 @@
+{
+  "name": "ixxx",
+  "version": "1.0.0",
+  "description": "It means igoist's xxx.",
+  "scripts": {
+    "build:dll": "webpack --config webpack/dll.js",
+    "build": "webpack --config webpack/dev.js",
+    "dev": "webpack --config webpack/dev.js --watch",
+    "dev.rel": " node scripts/release.js",
+    "rel": "NODE_ENV=production node scripts/release.js",
+    "sass": "node scripts/sass.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igoist/plugin-Ixxx.git"
+  },
+  "keywords": [
+    "igoist"
+  ],
+  "author": "igoist",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igoist/plugin-Ixxx/issues"
+  },
+  "homepage": "https://github.com/igoist/plugin-Ixxx#readme",
+  "dependencies": {
+    "immer": "^9.0.6",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "unstated-next": "^1.1.0",
+    "use-immer": "^0.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
+    "babel-loader": "^8.2.3",
+    "node-sass": "^6.0.1",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-merge": "^5.8.0"
+  }
+}

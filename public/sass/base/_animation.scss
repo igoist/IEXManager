@@ -1,0 +1,26 @@
+$PF: $P + '-fade';
+
+.#{$PF}-enter,
+.#{$PF}-leave {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+
+.#{$PF}-enter.#{$PF}-enter-active {
+  animation-play-state: running;
+}
+
+.#{$PF}-leave.#{$PF}-leave-active {
+  animation-play-state: running;
+  pointer-events: none;
+}
+
+.#{$PF}-enter,
+.#{$PF}-leave {
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.#{$PF}-enter {
+  opacity: 0;
+}
