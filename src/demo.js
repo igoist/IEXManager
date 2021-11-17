@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { prefix, dom, log, extension } from '@Utils';
-import { Provider } from '@Models';
+import { Provider, useIEXManagerHook } from '@Models';
 import { ExtensionItem } from '@Components';
 
 const { useEffect, useState } = React;
@@ -14,12 +14,7 @@ const mainF = () => {
   const pf = 'et-exm';
 
   const R = () => {
-    const [currentSnapshot, setCurrentSnapshot] = useState({
-      disabled: [],
-      enabled: [],
-    });
-    const [extensionHashs, setExtensionHashs] = useState({});
-    const [snapshotStore, setSnapshotStore] = useState([]);
+    const { currentSnapshot, extensionHashs, snapshotStore, dispatch } = useIEXManagerHook.useContainer();
 
     useEffect(() => {
       sendMessage(
@@ -34,16 +29,10 @@ const mainF = () => {
 
           console.log('here data', res);
 
-          setCurrentSnapshot(res.data.currentSnapshot);
-          setExtensionHashs(res.data.extensionHashs);
-          setSnapshotStore(res.data.snapshotStore);
-          // if (callback) {
-          //   callback(response);
-          // }
-
-          // if (response && response.msg) {
-          //   ETMessage.success(response.msg);
-          // }
+          dispatch({
+            type: 'initStore',
+            payload: res.data,
+          });
         }
       );
     }, []);
@@ -88,7 +77,19 @@ const mainF = () => {
                 let ext = extensionHashs[id];
 
                 if (ext) {
-                  return <ExtensionItem enabled={true} key={id} ext={ext} />;
+                  return (
+                    <ExtensionItem
+                      enabled={true}
+                      key={id}
+                      ext={ext}
+                      onClick={() =>
+                        dispatch({
+                          type: 'updateExtensionsState',
+                          payload: { indexes: [ext.id], enabled: false },
+                        })
+                      }
+                    />
+                  );
                 } else {
                   console.log('e', id, ext);
                   return null;
@@ -97,7 +98,19 @@ const mainF = () => {
               {currentSnapshot.disabled.map((id) => {
                 let ext = extensionHashs[id];
                 if (ext) {
-                  return <ExtensionItem enabled={false} key={id} ext={ext} />;
+                  return (
+                    <ExtensionItem
+                      enabled={false}
+                      key={id}
+                      ext={ext}
+                      onClick={() =>
+                        dispatch({
+                          type: 'updateExtensionsState',
+                          payload: { indexes: [ext.id], enabled: true },
+                        })
+                      }
+                    />
+                  );
                 } else {
                   console.log('d', id, ext);
                   return null;

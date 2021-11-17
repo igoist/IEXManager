@@ -4,14 +4,11 @@ import { prefix } from '@Utils';
 
 const ExtensionItem = (props) => {
   const pf = 'et-exm';
-  let { ext, enabled } = props;
+  let { ext, enabled, onClick } = props;
 
   if (ext) {
     return (
-      <div
-        className={`${prefix} ${pf}-ex-item ${!enabled ? pf + '-ex-item-disabled' : ''} `}
-        // onClick={_ => store.updateExtensionsState({indexes: [ext.id], state: !enabled})}
-      >
+      <div className={`${prefix} ${pf}-ex-item ${!enabled ? pf + '-ex-item-disabled' : ''} `} onClick={onClick}>
         <img className={`${prefix} ${pf}-ex-item-icon`} src={ext.icon} />
         <div className={`${prefix} ${pf}-ex-item-name`}>{ext.name}</div>
       </div>

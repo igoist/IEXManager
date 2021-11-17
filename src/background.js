@@ -89,8 +89,9 @@
 
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log(request);
+    const { action, payload } = request;
     try {
-      switch (request.action) {
+      switch (action) {
         case 'initStore':
           sendResponse({
             ok: true,
@@ -101,10 +102,70 @@
             },
           });
           return true;
+        case 'updateExtensionsState':
+          updateExtensionsState(payload.indexes, payload.enabled);
+          sendResponse({
+            ok: true,
+            data: {
+              currentSnapshot,
+            },
+          });
+          return true;
       }
     } catch (e) {
       sendResponse({ err: e.message });
       return true;
     }
   });
+
+  // ======================== fns
+  // 批量启用/禁用扩展
+  function updateExtensionsState(indexes, enabled) {
+    for (let id of indexes) {
+      // 确保扩展程序存在
+      if (extensionIndexes.indexOf(id) > -1) {
+        chrome.management.setEnabled(id, enabled);
+        // 同步扩展的状态变更到当前快照中
+        syncExtensionStateToCurrentSnapshot(id, enabled);
+      }
+    }
+  }
+
+  // 同步扩展程序的启用/禁用变更到当前快照
+  function syncExtensionStateToCurrentSnapshot(id, state) {
+    let { enabled, disabled } = currentSnapshot;
+
+    if (state) {
+      // 启用
+      exchange(id, disabled, enabled, extensionIndexes);
+    } else {
+      exchange(id, enabled, disabled, extensionIndexes);
+    }
+  }
+
+  // 从一个集合中移动一个元素到另一个集合，并保证顺序
+  function exchange(ele, srcColl, dstColl, sortRef) {
+    let index = srcColl.indexOf(ele);
+    if (index === -1) {
+      return;
+    }
+    srcColl.splice(index, 1);
+
+    let refIndexEle = sortRef.indexOf(ele);
+    if (refIndexEle === -1) {
+      dstColl.push(ele);
+      return;
+    }
+    let insertIndex;
+    for (insertIndex = 0; insertIndex < dstColl.length; insertIndex++) {
+      let item = dstColl[insertIndex];
+      let refIndexItem = sortRef.indexOf(item);
+      if (refIndexItem < refIndexEle) {
+        continue;
+      }
+      break;
+    }
+    dstColl.splice(insertIndex, 0, ele);
+  }
+  // ======================== fns
 })();
