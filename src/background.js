@@ -1,4 +1,10 @@
-(async () => {
+import * as fns from './backgroundFns';
+
+const main = async () => {
+  const log = console.log.bind(this);
+
+  const { backgroundFnsInit, pruneExtensionObject } = fns;
+
   const exId = chrome.runtime.id;
 
   // 当前扩展程序的状态快照
@@ -7,15 +13,20 @@
     disabled: [], // 禁用组
   };
 
+  // ======================== special fns
+  window.show = () => {
+    log('====================== show start');
+    log(commonProps);
+    // log(i18n('background_snapshot_none'));
+    // log(i18n('background_snapshot_all'));
+    // log(i18n('background_snapshot_last'));
+    log('====================== show end');
+  };
+  // ======================== special fns emd
+
   window.i18n = function (name) {
     return chrome.i18n.getMessage(name);
   };
-
-  console.log('=======================');
-  console.log(i18n('background_snapshot_none'));
-  console.log(i18n('background_snapshot_all'));
-  console.log(i18n('background_snapshot_last'));
-  console.log('=======================');
 
   // CHROME 已安装的扩展程序
   let extensionHashs = {};
@@ -37,62 +48,28 @@
     { name: SNAPSHOT_LAST, builtin: true, title: i18n('background_snapshot_last'), enabled: [], disabled: [] },
   ];
 
-  // 获取所以安装的扩展
-  const fetchExtensions = (fn) => {
-    return new Promise((resolve) => {
-      chrome.management.getAll((extensions) => {
-        let exts = extensions
-          .filter((extension) => extension.type === 'extension' && extension.id !== exId)
-          .map((extension) => {
-            return fn(extension);
-          });
-        resolve(exts);
-      });
-    });
+  const commonProps = {
+    exId,
+    extensionHashs,
+    extensionIndexes,
+    snapshotStore,
+    currentSnapshot,
   };
 
-  // 仅选取需要的字段
-  const pruneExtensionObject = (extension) => {
-    const { enabled, name, id, optionsUrl, icons } = extension;
-    const icon = icons && icons[0];
+  const backgroundFns = backgroundFnsInit(commonProps);
 
-    if (icon === undefined) {
-      console.log(`${name}'s icon is undefined`, icons);
-    }
-
-    return {
-      enabled,
-      name,
-      icon: icon && icon.url,
-      id,
-      optionsUrl,
-    };
-  };
-
-  // 根据是否 enabled 将得到的 extensions 进行归类
-  const handleExtensions = (extensions) => {
-    for (let ext of extensions) {
-      let { id, enabled } = ext;
-      extensionIndexes.push(id);
-      extensionHashs[id] = ext;
-      let abled = enabled ? currentSnapshot.enabled : currentSnapshot.disabled;
-      abled.push(id);
-    }
-  };
+  const { fetchExtensions, handleExtensions, extensionsStateUpdate, snapshotApply } = backgroundFns;
 
   await fetchExtensions(pruneExtensionObject).then(handleExtensions);
 
   // loadSnapshotStore();
-
-  // console.log(currentSnapshot.enabled);
-  // console.log(currentSnapshot.disabled);
 
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log(request);
     const { action, payload } = request;
     try {
       switch (action) {
-        case 'initStore':
+        case 'storeInit':
           sendResponse({
             ok: true,
             data: {
@@ -102,11 +79,22 @@
             },
           });
           return true;
-        case 'updateExtensionsState':
-          updateExtensionsState(payload.indexes, payload.enabled);
+        case 'extensionsStateUpdate':
+          extensionsStateUpdate(payload.indexes, payload.enabled);
           sendResponse({
             ok: true,
             data: {
+              currentSnapshot,
+            },
+          });
+          return true;
+        case 'snapshotApply':
+          console.log('snapshotApply', payload);
+          snapshotApply(payload.name);
+          sendResponse({
+            ok: true,
+            data: {
+              snapshotStore,
               currentSnapshot,
             },
           });
@@ -117,55 +105,10 @@
       return true;
     }
   });
+};
 
-  // ======================== fns
-  // 批量启用/禁用扩展
-  function updateExtensionsState(indexes, enabled) {
-    for (let id of indexes) {
-      // 确保扩展程序存在
-      if (extensionIndexes.indexOf(id) > -1) {
-        chrome.management.setEnabled(id, enabled);
-        // 同步扩展的状态变更到当前快照中
-        syncExtensionStateToCurrentSnapshot(id, enabled);
-      }
-    }
-  }
-
-  // 同步扩展程序的启用/禁用变更到当前快照
-  function syncExtensionStateToCurrentSnapshot(id, state) {
-    let { enabled, disabled } = currentSnapshot;
-
-    if (state) {
-      // 启用
-      exchange(id, disabled, enabled, extensionIndexes);
-    } else {
-      exchange(id, enabled, disabled, extensionIndexes);
-    }
-  }
-
-  // 从一个集合中移动一个元素到另一个集合，并保证顺序
-  function exchange(ele, srcColl, dstColl, sortRef) {
-    let index = srcColl.indexOf(ele);
-    if (index === -1) {
-      return;
-    }
-    srcColl.splice(index, 1);
-
-    let refIndexEle = sortRef.indexOf(ele);
-    if (refIndexEle === -1) {
-      dstColl.push(ele);
-      return;
-    }
-    let insertIndex;
-    for (insertIndex = 0; insertIndex < dstColl.length; insertIndex++) {
-      let item = dstColl[insertIndex];
-      let refIndexItem = sortRef.indexOf(item);
-      if (refIndexItem < refIndexEle) {
-        continue;
-      }
-      break;
-    }
-    dstColl.splice(insertIndex, 0, ele);
-  }
-  // ======================== fns
-})();
+try {
+  main();
+} catch (err) {
+  console.log('main err', err);
+}

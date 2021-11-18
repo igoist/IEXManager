@@ -1,42 +1,17 @@
 import * as React from 'react';
 
-import { prefix, log, extension } from '@Utils';
+import { prefix } from '@Utils';
 import { Provider, useIEXManagerHook } from '@Models';
 import { ExtensionItem } from '@Components';
-
-const { useEffect } = React;
-const { sendMessage } = extension;
-const { l } = log;
 
 const pf = 'et-exm';
 
 const R = () => {
   const { currentSnapshot, extensionHashs, snapshotStore, dispatch } = useIEXManagerHook.useContainer();
 
-  useEffect(() => {
-    sendMessage(
-      {
-        action: 'initStore',
-      },
-      (res) => {
-        l({
-          title: 'Demo test',
-          text: 'should be success',
-        });
-
-        console.log('here data', res);
-
-        dispatch({
-          type: 'initStore',
-          payload: res.data,
-        });
-      }
-    );
-  }, []);
-
   console.log(`here render ================= ${currentSnapshot.enabled.length} - ${currentSnapshot.disabled.length}`);
 
-  if (currentSnapshot.enabled.length && currentSnapshot.disabled.length) {
+  if (currentSnapshot.enabled.length + currentSnapshot.disabled.length > 0) {
     return (
       <>
         <div className={`${prefix} ${pf}-wrap`}>
@@ -55,6 +30,21 @@ const R = () => {
                 return (
                   <div className={`${prefix} ${pf}-snapshot-item`} key={name}>
                     <span className={`${prefix} ${pf}-snapshot-item-name`}>{title || name}</span>
+                    <div className={`${prefix} ${pf}-snapshot-item-btns`}>
+                      <div
+                        className={`${prefix} ${pf}-snapshot-item-btn ${pf}-snapshot-item-btn-apply`}
+                        onClick={() =>
+                          dispatch({
+                            type: 'snapshotApply',
+                            payload: {
+                              name,
+                            },
+                          })
+                        }
+                      >
+                        A
+                      </div>
+                    </div>
                     {/* <div className='snapshot-btns'>
                   <button className='btn' onClick={_ => applySnapshot({name})}>
                     <i className='icon icon-apply' />
@@ -81,7 +71,7 @@ const R = () => {
                     ext={ext}
                     onClick={() =>
                       dispatch({
-                        type: 'updateExtensionsState',
+                        type: 'extensionsStateUpdate',
                         payload: { indexes: [ext.id], enabled: false },
                       })
                     }
@@ -102,7 +92,7 @@ const R = () => {
                     ext={ext}
                     onClick={() =>
                       dispatch({
-                        type: 'updateExtensionsState',
+                        type: 'extensionsStateUpdate',
                         payload: { indexes: [ext.id], enabled: true },
                       })
                     }

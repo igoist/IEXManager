@@ -33,6 +33,7 @@
   line-height: 32px;
   font-size: 12px;
   text-align: left;
+  cursor: pointer;
 }
 
 .#{$P}-snapshot-item-name {
@@ -40,8 +41,24 @@
   @include textOverflow;
 }
 
-.#{$P}-exs {
+.#{$P}-snapshot-item-btns {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  height: 32px;
+  line-height: 32px;
 }
+
+.#{$P}-snapshot-item-btn {
+  padding: 0 12px;
+  height: 32px;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+// .#{$P}-snapshot-item-btn-apply {
+
+// }
 
 .#{$P}-ex-item {
   position: relative;
@@ -49,6 +66,7 @@
   height: 32px;
   line-height: 32px;
   font-size: 12px;
+  cursor: pointer;
 
   &.#{$P}-ex-item-disabled {
     .#{$P}-ex-item-icon {
